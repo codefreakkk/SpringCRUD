@@ -42,4 +42,26 @@ public class UserDao {
             }
         });
     }
+
+    public int deleteUser(String uid) {
+        String sql = "DELETE FROM `user` WHERE id = ?";
+        int row = jdbcTemplate.update(sql, Integer.parseInt(uid));
+        return row;
+    }
+
+    public User getStudentDataById(String uid) {
+        String sql = "SELECT * FROM `user` WHERE id = ?";
+        User user = (User) jdbcTemplate.queryForObject(sql, new RowMapper<User>() {
+            @Override
+            public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setName(rs.getString("name"));
+                user.setAddress(rs.getString("address"));
+                return user;
+            }
+        }, Integer.parseInt(uid));
+
+        return user;
+    }
 }

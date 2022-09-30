@@ -17,4 +17,12 @@ public class UserService {
     public List<User> getAllUsersData() {
         return this.userDao.getAllUsers();
     }
+
+    public int deleteUser(String uid) {
+        return this.userDao.deleteUser(uid);
+    }
+
+    public User getUserDataById(String uid) {
+        return this.userDao.getStudentDataById(uid);
+    }
 }

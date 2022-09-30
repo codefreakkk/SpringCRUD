@@ -39,9 +39,24 @@ public class HomeController {
                     "                <td>"+data.name+"</td>\n" +
                     "                <td>"+data.address+"</td>\n" +
                     "                <td style='cursor: pointer' data-uid='"+data.id+"' id='del'>delete</td>\n" +
+                    "                <td style='cursor: pointer' data-uid='"+data.id+"' id='update'>update</td>\n" +
                     "            </tr>";
         }
 
+        return response;
+    }
+
+    @RequestMapping(value = "/deleteuser", method = RequestMethod.POST)
+    public @ResponseBody String deleteUser(@RequestParam("uid") String uid) {
+        String response = "";
+        int row = this.userService.deleteUser(uid);
+        return String.valueOf(row);
+    }
+
+    @RequestMapping(value = "/updateuser", method = RequestMethod.POST)
+    public @ResponseBody String updateUser(@RequestParam("uid") String uid) {
+        User user = this.userService.getUserDataById(uid);
+        String response = user.getName() + "/" + user.getAddress();
         return response;
     }
 }

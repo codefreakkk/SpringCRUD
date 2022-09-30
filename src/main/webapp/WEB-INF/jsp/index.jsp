@@ -24,7 +24,7 @@
                     <input type="text" name="address" class="form-control" id="address" placeholder="Address">
                 </div>
                 <div class="col-sm-10">
-                    <button type="button" id="submitForm" class="btn btn-primary">Submit</button>
+                    <button type="submit" id="submitForm" class="btn btn-primary">Submit</button>
                 </div>
             </form>
         </div>
@@ -36,6 +36,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">Address</th>
                 <th scope="col">Delete</th>
+                <th scope="col">Update</th>
 
             </tr>
             </thead>
@@ -50,7 +51,8 @@
         $(document).ready(function() {
             getData();
             // insert data
-            $("#submitForm").on('click', function() {
+            $("#submitForm").on('click', function(e) {
+                e.preventDefault();
                 let form = $("#userform");
                 $.ajax({
                     url: "${pageContext.request.contextPath}/adduser",
@@ -70,10 +72,21 @@
                 $("#address").val("");
             })
 
-            // delete perticular data
+            // delete particular data
             $(document).on('click', '#del', function() {
                 let uid = $(this).data("uid")
-                console.log(uid)
+                let obj = {uid : uid};
+                $.ajax({
+                    url: "${pageContext.request.contextPath}/deleteuser",
+                    type: "POST",
+                    data: obj,
+                    success: function (data) {
+                        if(data == "1") {
+                            getData();
+                        }
+                        else alert("Some error occured")
+                    }
+                })
             })
 
             // fetch data
@@ -86,6 +99,21 @@
                     }
                 })
             }
+
+            // update data
+            $(document).on('click', "#update", function() {
+                let uid = $(this).data("uid");
+                $.ajax({
+                    url: "${pageContext.request.contextPath}/updateuser",
+                    type: "POST",
+                    data: {uid: uid},
+                    success: function (data) {
+                        let datas = data.split('/');
+                        $("#name").val(datas[0])
+                        $("#address").val(datas[1])
+                    }
+                })
+            })
         })
     </script>
 
